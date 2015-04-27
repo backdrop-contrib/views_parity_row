@@ -1,0 +1,5 @@
+name = "Views Parity Row"
+description = "Provide a new Views row plugin that enable different view mode for content on odd and even rows."
+core = "7.x"
+dependencies[] = views
+files[] = views/views_parity_row_plugin_row_node_parity_view.inc
