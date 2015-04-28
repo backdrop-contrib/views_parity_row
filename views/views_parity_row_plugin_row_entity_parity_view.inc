@@ -138,7 +138,7 @@ class views_parity_row_plugin_row_entity_parity_view extends entity_views_plugin
         }
 
         if ($view_mode_override == TRUE) {
-          if ($this->view->row_index % $this->options['views_parity_row']['frequency'] == 0) {
+          if ($this->view->row_index-$this->options['views_parity_row']['start'] % $this->options['views_parity_row']['frequency'] == 0) {
             $view_mode = $this->options['views_parity_row']['view_mode'];
           }
         }
