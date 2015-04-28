@@ -17,83 +17,99 @@ class views_parity_row_plugin_row_node_parity_view extends views_plugin_row_node
   function option_definition() {
     $options = parent::option_definition();
 
-    $options['views_parity_row']['enable'] = array('default' => FALSE, 'bool' => TRUE);
-    $options['views_parity_row']['odd']['view_mode'] = array('default' => 'teaser');
-    $options['views_parity_row']['even']['view_mode'] = array('default' => 'teaser');
+    $options['views_parity_row_enable'] = array('default' => FALSE, 'bool' => TRUE);
+    $options['views_parity_row']['frequency'] = array('default' => '2');
+    $options['views_parity_row']['start'] = array('default' => '0');
+    $options['views_parity_row']['end'] = array('default' => '0');
+    $options['views_parity_row']['view_mode'] = array('default' => 'teaser');
 
     return $options;
+  }
+
+  function summary_title() {
+    if ($this->options['views_parity_row_enable'] == TRUE) {
+      $options = $this->options_form_summary_options();
+      return check_plain($options[$this->options['view_mode']] . ' | ' . $this->options['views_parity_row']['frequency'] . ' | ' . $options[$this->options['views_parity_row']['view_mode']]);
+    } else {
+      return parent::summary_title();
+    }
   }
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
 
-    $options = $this->options_form_summary_options();
-    $form['view_mode'] = array(
-      '#type' => 'select',
-      '#options' => $options,
-      '#title' => t('View mode'),
-      '#default_value' => $this->options['view_mode'],
-    );
-    $form['links'] = array(
+    $form['views_parity_row_enable'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Display links'),
-      '#default_value' => $this->options['links'],
-    );
-    $form['comments'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Display comments'),
-      '#default_value' => $this->options['comments'],
-    );
-    $form['views_parity_row']['enable'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Enable a different view mode for odd and even rows ?'),
-      '#default_value' => $this->options['views_parity_row']['enable'],
+      '#title' => t('Alternate with a different view mode every X rows ?'),
+      '#default_value' => $this->options['views_parity_row_enable'],
     );
 
-    $form['views_parity_row']['even'] = array(
+    $form['views_parity_row'] = array(
       '#type' => 'fieldset',
-      '#title' => t('Configuration for even rows (0, 2, 4, 6, ...)'),
+      '#title' => t('Configuration of Views Parity Row'),
       '#states' => array(
         'visible' => array(
-          ':input[name="row_options[views_parity_row][enable]"]' => array('checked' => TRUE),
+          ':input[name="row_options[views_parity_row_enable]"]' => array('checked' => TRUE),
         ),
+      ),
+      'frequency' => array(
+        '#type' => 'textfield',
+        '#title' => t('Frequency of view mode change.'),
+        '#description' => t('Chose a positive integer number. This number will be the frequency of change of the content view mode. Example, if you chose <em>3</em>, it means that every 3 rows, the content will use the other View mode.'),
+        '#size' => 6,
+        '#maxlength' => 6,
+        '#default_value' => $this->options['views_parity_row']['frequency'],
+        '#element_validate' => array('element_validate_integer_positive')
+      ),
+      'start' => array(
+        '#type' => 'textfield',
+        '#title' => t('Start'),
+        '#description' => t('Start at which row ?'),
+        '#size' => 6,
+        '#maxlength' => 6,
+        '#default_value' => $this->options['views_parity_row']['start'],
+        '#element_validate' => array('element_validate_integer')
+      ),
+      'end' => array(
+        '#type' => 'textfield',
+        '#title' => t('End'),
+        '#description' => t('End at which row ? Set <em>0</em> to disable.'),
+        '#size' => 6,
+        '#maxlength' => 6,
+        '#default_value' => $this->options['views_parity_row']['end'],
+        '#element_validate' => array('element_validate_integer')
       ),
       'view_mode' => array(
         '#type' => 'select',
-        '#options' => $options,
-        '#title' => t('View mode'),
-        '#default_value' => $this->options['views_parity_row']['even']['view_mode'],
+        '#options' => $this->options_form_summary_options(),
+        '#title' => t('Alternate view mode'),
+        '#default_value' => $this->options['views_parity_row']['view_mode'],
       ),
     );
-
-    $form['views_parity_row']['odd'] = array(
-      '#type' => 'fieldset',
-      '#title' => t('Configuration for odd rows (1, 3, 5, 7, ...)'),
-      '#states' => array(
-        'visible' => array(
-          ':input[name="row_options[views_parity_row][enable]"]' => array('checked' => TRUE),
-        ),
-      ),
-      'view_mode' => array(
-        '#type' => 'select',
-        '#options' => $options,
-        '#title' => t('View mode'),
-        '#default_value' => $this->options['views_parity_row']['odd']['view_mode'],
-      ),
-    );
-
   }
 
   function render($row) {
     if (isset($this->nodes[$row->{$this->field_alias}])) {
       $node = $this->nodes[$row->{$this->field_alias}];
       $node->view = $this->view;
+      $view_mode = $this->options['view_mode'];
 
-      if ($this->options['views_parity_row']['enable'] == TRUE) {
-        if ($this->view->row_index % 2 == 0) {
-          $view_mode = $this->options['views_parity_row']['even']['view_mode'];
-        } else {
-          $view_mode = $this->options['views_parity_row']['odd']['view_mode'];
+      if ($this->options['views_parity_row_enable'] == TRUE) {
+        $view_mode_override = FALSE;
+        if ($this->view->row_index >= $this->options['views_parity_row']['start']) {
+          if ($this->options['views_parity_row']['end'] != 0) {
+            if ($this->view->row_index <= $this->options['views_parity_row']['end']) {
+              $view_mode_override = TRUE;
+            }
+          } else {
+            $view_mode_override = TRUE;
+          }
+        }
+
+        if ($view_mode_override == TRUE) {
+          if ($this->view->row_index % $this->options['views_parity_row']['frequency'] == 0) {
+            $view_mode = $this->options['views_parity_row']['view_mode'];
+          }
         }
       }
 
