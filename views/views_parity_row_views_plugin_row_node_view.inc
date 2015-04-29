@@ -5,17 +5,15 @@ include('views_parity_row_base.inc');
 
 /**
  * @file
- * Contains the Views Parity Row row style plugin.
+ * Contains the Views Parity Row row style plugin for node.
  */
 
 /**
  * Plugin which performs a node_view on the resulting object.
  *
- * Most of the code on this object is in the theme function.
- *
  * @ingroup views_row_plugins
  */
-class views_parity_row_plugin_row_node_parity_view extends views_plugin_row_node_view {
+class views_parity_row_views_plugin_row_node_view extends views_plugin_row_node_view {
   use views_parity_row_base;
 
   function render($row) {

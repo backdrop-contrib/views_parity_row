@@ -5,17 +5,15 @@ include('views_parity_row_base.inc');
 
 /**
  * @file
- * Contains the Views Parity Row for entities row style plugin.
+ * Contains the Views Parity Row row style plugin for entities.
  */
 
 /**
- * Plugin which performs a node_view on the resulting object.
- *
- * Most of the code on this object is in the theme function.
+ * Plugin which performs a entity_view on the resulting object.
  *
  * @ingroup views_row_plugins
  */
-class views_parity_row_plugin_row_entity_parity_view extends entity_views_plugin_row_entity_view {
+class views_parity_row_views_plugin_row_entity_view extends entity_views_plugin_row_entity_view {
   use views_parity_row_base;
   /**
    * Return the main options, which are shown in the summary title.
