@@ -1,9 +1,7 @@
 name = "Views Parity Row"
 description = "Provide a new Views row plugin that enable alternate view mode on particular rows."
-core = "7.x"
+backdrop = 1.x
 package = Views
+
+dependencies[] = entity_plus
 dependencies[] = views
-php = 5.4
-files[] = views/views_parity_row_views_plugin_row_node_view.inc
-files[] = views/views_parity_row_views_plugin_row_entity_view.inc
-files[] = views/views_parity_row_base.inc

@@ -6,6 +6,14 @@
 function views_parity_row_views_api() {
   return array(
     'api' => 3,
-    'path' => drupal_get_path('module', 'views_parity_row') . '/views',
+    'path' => backdrop_get_path('module', 'views_parity_row') . '/views',
+  );
+}
+
+function views_parity_row_autoload_info() {
+  return array(
+    'views_parity_row_views_plugin_row_node_view' => 'views/views_parity_row_views_plugin_row_node_view.inc',
+    'views_parity_row_views_plugin_row_entity_view' => 'views/views_parity_row_views_plugin_row_entity_view.inc',
+    'views_parity_row_base' => 'views/views_parity_row_base.inc',
   );
 }

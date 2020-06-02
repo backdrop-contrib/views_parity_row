@@ -45,31 +45,28 @@ trait views_parity_row_base {
         ),
       ),
       'frequency' => array(
-        '#type' => 'textfield',
+        '#type' => 'number',
         '#title' => t('Frequency of view mode change.'),
         '#description' => t('Chose a positive integer number. This number will be the frequency of change of the content view mode. Example, if you chose <em>3</em>, it means that every 3 rows, the content will use the other View mode.'),
         '#size' => 6,
         '#maxlength' => 6,
         '#default_value' => isset($options['frequency']) ? (int) $options['frequency'] : $default['views_parity_row']['frequency']['default'],
-        '#element_validate' => array('element_validate_integer_positive')
       ),
       'start' => array(
-        '#type' => 'textfield',
+        '#type' => 'number',
         '#title' => t('Start'),
         '#description' => t('Start at which row ?'),
         '#size' => 6,
         '#maxlength' => 6,
         '#default_value' => isset($options['start']) ? (int) $options['start'] : $default['views_parity_row']['start']['default'],
-        '#element_validate' => array('element_validate_integer')
       ),
       'end' => array(
-        '#type' => 'textfield',
+        '#type' => 'number',
         '#title' => t('End'),
         '#description' => t('End at which row ?'),
         '#size' => 6,
         '#maxlength' => 6,
         '#default_value' => isset($options['end']) ? (int) $options['end'] : $default['views_parity_row']['end']['default'],
-        '#element_validate' => array('element_validate_integer')
       ),
       'view_mode' => array(
         '#type' => 'select',
