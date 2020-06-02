@@ -14,5 +14,4 @@ function views_parity_row_views_plugins_alter(&$plugins) {
       $plugins['row'][$plugin_name . '_alternate'] = $new_plugin;
     }
   }
-  dpm($plugins);
 }
